@@ -7,13 +7,16 @@ import {
 const create = async (req, res) => {
   try {
     const { title, text, banner } = req.body;
-    if (!title || !text || !banner) res.status(400).send({ message: "submit all fields for registration" });
+    if (!title || !text || !banner)
+      return res
+        .status(400)
+        .send({ message: "submit all fields for registration" });
 
     await createService({
-        title,
-        text,
-        banner,
-        id: "objectidfake1"
+      title,
+      text,
+      banner,
+      user: req.userId,
     });
 
     res.send(201);
@@ -22,9 +25,13 @@ const create = async (req, res) => {
   }
 };
 
-const findAll = (req, res) => {
-  const news = [];
-  res.send(news);
+const findAll = async (req, res) => {
+  try {
+    const news = await findAllService();
+    return res.send(news);
+  } catch (error) {
+    return res.status(500).send({ message: err });
+  }
 };
 
 export { create, findAll };
