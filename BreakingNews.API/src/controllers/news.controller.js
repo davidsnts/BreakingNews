@@ -7,6 +7,7 @@ import {
   searchByTitleService,
   byUserService,
   updateService,
+  eraseService,
 } from "../services/news.service.js";
 
 const create = async (req, res) => {
@@ -195,4 +196,23 @@ const update = async (req, res) => {
     
   } catch (err) {}
 };
-export { create, findAll, topNews, findById, searchByTitle, byUser, update };
+
+const erase = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const news = await findByIdService(id);
+    
+    
+    if (news.user.id != req.userId)
+      return res
+        .status(400)
+        .send({ message: "Esse conteúdo não pertence a esse usuário" });
+
+    await eraseService(id);
+    return res.send({ message: "Post deletado com sucesso" });
+
+  } catch (err) {
+    
+  }
+}
+export { create, findAll, topNews, findById, searchByTitle, byUser, update, erase };

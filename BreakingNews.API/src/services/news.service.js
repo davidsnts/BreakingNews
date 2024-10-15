@@ -24,6 +24,10 @@ const byUserService = (id) => {
 const updateService = async (id, title, text, banner) => {
   await News.findOneAndUpdate({_id: id}, {title, text, banner}, {rawResult: true})
 }
+
+const eraseService = async (id) => {
+  await News.findOneAndDelete({_id : id})
+}
 export {
   createService,
   findAllService,
@@ -32,5 +36,6 @@ export {
   topNewsService,
   searchByTitleService,
   byUserService,
-  updateService
+  updateService,
+  eraseService
 };
