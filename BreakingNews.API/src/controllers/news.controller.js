@@ -9,7 +9,9 @@ import {
   updateService,
   eraseService,
   likeNewsService,
-  deleteLikeService
+  deleteLikeService,
+  addCommentService,
+  deleteCommentService,
 } from "../services/news.service.js";
 
 const create = async (req, res) => {
@@ -173,7 +175,9 @@ const byUser = async (req, res) => {
         userAvatar: item.user.avatar,
       })),
     });
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
 const update = async (req, res) => {
@@ -194,7 +198,9 @@ const update = async (req, res) => {
 
     await updateService(id, title, text, banner);
     return res.send({ message: "Post atualizado com sucesso" });
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
 const erase = async (req, res) => {
@@ -209,7 +215,9 @@ const erase = async (req, res) => {
 
     await eraseService(id);
     return res.send({ message: "Post deletado com sucesso" });
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
 const likeNews = async (req, res) => {
@@ -219,14 +227,52 @@ const likeNews = async (req, res) => {
     const newsLiked = await likeNewsService(id, req.userId);
 
     if (!newsLiked) {
-      await deleteLikeService(id, req.userId)
+      await deleteLikeService(id, req.userId);
       return res.send({ message: "Post descurtido com sucesso" });
     }
 
     return res.send({ message: "Post curtido com sucesso" });
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+    const { comment } = req.body;
+
+    if (!comment)
+      return res.status(400).send({ message: "Escreva um comentário" });
+
+    await addCommentService(id, comment, userId);
+    res.status(200).send({ message: "Comentário adicionado com sucesso" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const deleteComment = async (req, res) => {
+  try {
+    const { idNews, idComment } = req.params;
+    const userId = req.userId;
+
+    const comentDeleted = await deleteCommentService(idNews, idComment, userId);
+
+    const commentFinder = comentDeleted.comments.find(
+      (comment) => comment.idComment === idComment
+    );
+    if (!commentFinder)
+      return res.status(404).send({ message: "O comentário não existe" });
+
+    res.status(200).send({ message: "Comentário removido com sucesso" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 export {
+  addComment,
   create,
   findAll,
   topNews,
@@ -236,4 +282,5 @@ export {
   update,
   erase,
   likeNews,
+  deleteComment,
 };

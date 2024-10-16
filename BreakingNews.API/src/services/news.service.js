@@ -22,18 +22,39 @@ const byUserService = (id) => {
   News.find({ user: id }).sort({ _id: -1 }).populate("user");
 };
 const updateService = async (id, title, text, banner) => {
-  await News.findOneAndUpdate({_id: id}, {title, text, banner}, {rawResult: true})
-}
+  await News.findOneAndUpdate(
+    { _id: id },
+    { title, text, banner },
+    { rawResult: true }
+  );
+};
 
 const eraseService = async (id) => {
-  await News.findOneAndDelete({_id : id})
+  await News.findOneAndDelete({ _id: id });
+};
+
+const likeNewsService = async (idNews, userId) =>
+  await News.findOneAndUpdate(
+    { _id: idNews, "likes.userId": { $nin: [userId] } },
+    { $push: { likes: { userId, created: new Date() } } }
+  );
+
+const deleteLikeService = async (idNews, userId) =>
+  await News.findOneAndUpdate(
+    { _id: idNews },
+    { $pull: { likes: { userId } } }
+  );
+
+const addCommentService = async (idNews, comment, userId) => {
+  const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+  return await News.findOneAndUpdate({ _id: idNews },  { $push: { comments: { idComment, userId,comment, created: new Date() } } });
+};
+const deleteCommentService = async (idNews, idComment, userId) => {
+  return await News.findOneAndUpdate({_id : idNews}, {$pull: {comments: {idComment, userId}}})
 }
 
-const likeNewsService = async (idNews, userId) => await News.findOneAndUpdate({_id: idNews, "likes.userId": {$nin : [userId]}}, {$push: {likes: {userId, created: new Date()}}})
-
-const deleteLikeService = async (idNews, userId) => await News.findOneAndUpdate({_id: idNews}, {$pull: {likes: {userId}}})
-
 export {
+  addCommentService,
   createService,
   findAllService,
   findByIdService,
@@ -44,5 +65,6 @@ export {
   updateService,
   eraseService,
   likeNewsService,
-  deleteLikeService
+  deleteLikeService,
+  deleteCommentService
 };
