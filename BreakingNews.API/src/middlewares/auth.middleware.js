@@ -18,9 +18,6 @@ export const authMiddleware = async (req, res, next) => {
 
     req.user = user;
     req.userId = user._id;
-
-    console.log(user);
-
     next();
   } catch (err) {
     if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError")

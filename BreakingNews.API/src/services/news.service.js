@@ -28,6 +28,11 @@ const updateService = async (id, title, text, banner) => {
 const eraseService = async (id) => {
   await News.findOneAndDelete({_id : id})
 }
+
+const likeNewsService = async (idNews, userId) => await News.findOneAndUpdate({_id: idNews, "likes.userId": {$nin : [userId]}}, {$push: {likes: {userId, created: new Date()}}})
+
+const deleteLikeService = async (idNews, userId) => await News.findOneAndUpdate({_id: idNews}, {$pull: {likes: {userId}}})
+
 export {
   createService,
   findAllService,
@@ -37,5 +42,7 @@ export {
   searchByTitleService,
   byUserService,
   updateService,
-  eraseService
+  eraseService,
+  likeNewsService,
+  deleteLikeService
 };

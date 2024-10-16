@@ -8,6 +8,8 @@ import {
   byUserService,
   updateService,
   eraseService,
+  likeNewsService,
+  deleteLikeService
 } from "../services/news.service.js";
 
 const create = async (req, res) => {
@@ -134,7 +136,6 @@ const searchByTitle = async (req, res) => {
   try {
     const { title } = req.query;
     const news = await searchByTitleService(title);
-    console.log(news);
 
     return res.send({
       results: news.map((item) => ({
@@ -193,7 +194,6 @@ const update = async (req, res) => {
 
     await updateService(id, title, text, banner);
     return res.send({ message: "Post atualizado com sucesso" });
-    
   } catch (err) {}
 };
 
@@ -201,8 +201,7 @@ const erase = async (req, res) => {
   try {
     const { id } = req.params;
     const news = await findByIdService(id);
-    
-    
+
     if (news.user.id != req.userId)
       return res
         .status(400)
@@ -210,9 +209,31 @@ const erase = async (req, res) => {
 
     await eraseService(id);
     return res.send({ message: "Post deletado com sucesso" });
+  } catch (err) {}
+};
 
-  } catch (err) {
-    
-  }
-}
-export { create, findAll, topNews, findById, searchByTitle, byUser, update, erase };
+const likeNews = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const newsLiked = await likeNewsService(id, req.userId);
+
+    if (!newsLiked) {
+      await deleteLikeService(id, req.userId)
+      return res.send({ message: "Post descurtido com sucesso" });
+    }
+
+    return res.send({ message: "Post curtido com sucesso" });
+  } catch (err) {}
+};
+export {
+  create,
+  findAll,
+  topNews,
+  findById,
+  searchByTitle,
+  byUser,
+  update,
+  erase,
+  likeNews,
+};
