@@ -1,30 +1,35 @@
+import "dotenv/config";
 import jwt from "jsonwebtoken";
-import userService from "../services/user.service.js";
+import userRepositories from "../repositories/user.repositories.js";
 
-export const authMiddleware = async (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader)
+    return res.status(401).send({ message: "The token was not informed!" });
 
-    if (!authorization || !authorization.startsWith("Bearer "))
-      return res.status(401).json({ message: "Token missing or malformed" });
+  const parts = authHeader.split(" "); /* ["Bearer", "asdasdasdadsadasd"] */
 
-    const token = authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.SECRET_JWT);
+  
+  
+  if (parts.length !== 2)
+    return res.status(401).send({ message: "Invalid token!" });
+ 
+  const [scheme, token] = parts;
 
-    const user = await userService.findByIdService(decoded.id);
+  if (!/^Bearer$/i.test(scheme))
+    return res.status(401).send({ message: "Malformatted Token!" });
 
-    if (!user)
-      return res.status(401).json({ message: "Usuário não encontrado" });
+  jwt.verify(token, process.env.SECRET_JWT, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Invalid token!" });
 
-    req.user = user;
-    req.userId = user._id;
-    next();
-  } catch (err) {
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError")
-      return res.status(401).json({ message: "Invalid or expired token" });
+    const user = await userRepositories.findByIdUserRepository(decoded.id);
+    if (!user || !user.id)
+      return res.status(401).send({ message: "Invalid token!" });
 
-    return res
-      .status(500)
-      .json({ message: "Internal server error", error: err.message });
-  }
-};
+    req.userId = user.id;
+
+    return next();
+  });
+}
+
+export default authMiddleware;

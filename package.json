@@ -1,27 +1,34 @@
 {
-  "name": "breakingnews.api",
+  "name": "api-breakingnews",
   "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node --no-warnings server.js",
+    "dev": "nodemon --no-warnings server.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codethi/api-breakingnews.git"
   },
   "keywords": [],
-  "author": "David Santos",
+  "author": "",
   "license": "ISC",
-  "description": "API for SPA Breaking News",
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.7.1",
-    "nodemon": "^3.1.7",
-    "swagger-ui-express": "^5.0.1"
+  "bugs": {
+    "url": "https://github.com/codethi/api-breakingnews/issues"
   },
-  "engines": {
-    "node": "16.x" 
+  "homepage": "https://github.com/codethi/api-breakingnews#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.10",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

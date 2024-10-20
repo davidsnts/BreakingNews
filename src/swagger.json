@@ -4,23 +4,18 @@
     "title": "Breaking News API Documentation",
     "description": "In this documentation you will be able to consult the API end-points and also test all available routes. Do not forget to register and carry out the authorization.",
     "contact": {
-      "email": "david.santos@gmail.com"
+      "email": "docencia.thiago@gmail.com"
     },
     "version": "1.0.0"
   },
-  "servers": [    
+  "servers": [
     {
-      "url": "https://apibreakingnews-2qns.onrender.com",
-      "description": "renderAPI"
-    },
-    {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:3001",
       "description": "Local"
     }
-   
   ],
   "paths": {
-    "/user/": {
+    "/user/create": {
       "post": {
         "summary": "Create a new user",
         "description": "Route responsible for creating a new user",
@@ -93,7 +88,7 @@
         }
       }
     },
-    "/user/{id}/": {
+    "/user/findById/{id}": {
       "get": {
         "summary": "Search user by id",
         "description": "Route responsible for searching for user by id",
@@ -129,7 +124,7 @@
         }
       }
     },
-    "/user/{id}": {
+    "/user/update/{id}": {
       "patch": {
         "summary": "Update user by id",
         "description": "Route responsible for editing the user by id",
@@ -153,7 +148,7 @@
               "examples": {
                 "Users": {
                   "value": {
-                    "name": "David Santos"
+                    "name": "Thiago Lima"
                   }
                 }
               }
@@ -181,7 +176,7 @@
         }
       }
     },
-    "/auth/": {
+    "/auth/login": {
       "post": {
         "summary": "Login to Breaking News",
         "description": "Route responsible for logging in a registered user",
@@ -195,7 +190,7 @@
               "examples": {
                 "User": {
                   "value": {
-                    "email": "david.santos@gmail.com",
+                    "email": "docencia.thiago@gmail.com",
                     "password": "12345"
                   }
                 }
@@ -213,7 +208,7 @@
         }
       }
     },
-    "/news/": {
+    "/posts/create": {
       "post": {
         "summary": "Create a new post",
         "description": "Route responsible for creating a new Post",
@@ -261,7 +256,7 @@
         }
       }
     },
-    "/news/": {
+    "/posts": {
       "get": {
         "summary": "Search all posts",
         "description": "Route responsible for fetching all posts",
@@ -298,7 +293,7 @@
         }
       }
     },
-    "/news/top": {
+    "/posts/top": {
       "get": {
         "summary": "Search top post",
         "description": "Route responsible for fetching top post",
@@ -321,7 +316,7 @@
         }
       }
     },
-    "/news/search": {
+    "/posts/search": {
       "get": {
         "summary": "Search posts by title",
         "description": "Route responsible for fetching the posts that match the title sent via query params",
@@ -354,7 +349,7 @@
         }
       }
     },
-    "/news/{id}": {
+    "/posts/byIdPost/{id}": {
       "patch": {
         "summary": "Search post by id",
         "description": "Route responsible for fetching post by id",
@@ -390,7 +385,7 @@
         }
       }
     },
-    "/news/": {
+    "/posts/byUserId": {
       "get": {
         "summary": "Search posts by use id",
         "description": "Route responsible for fetching posts by use id",
@@ -418,7 +413,7 @@
         }
       }
     },
-    "/news/{id}": {
+    "/posts/upadate/{id}": {
       "patch": {
         "summary": "Update a post",
         "description": "Route responsible for updating a Post",
@@ -472,7 +467,7 @@
         }
       }
     },
-    "/news/{id}": {
+    "/posts/delete/{id}": {
       "delete": {
         "summary": "Delete a post",
         "description": "Route responsible for deleting a Post",
@@ -500,7 +495,7 @@
         }
       }
     },
-    "/news/like/{id}": {
+    "/posts/{id}/like": {
       "patch": {
         "summary": "Like a post",
         "description": "Route responsible for liking a post",
@@ -528,7 +523,7 @@
         }
       }
     },
-    "/news/comment/{id}": {
+    "/posts/{id}/comment": {
       "patch": {
         "summary": "Comment on a post",
         "description": "Route responsible for commenting on a post",
@@ -552,7 +547,7 @@
               "examples": {
                 "Comment": {
                   "value": {
-                    "comment": "Comentário legal"
+                    "message": "Comentário legal"
                   }
                 }
               }
